@@ -1,0 +1,83 @@
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 3.05rem;
+  padding: 0.7rem 1.45rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 0.3s var(--ease),
+    background 0.3s var(--ease),
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+
+.btn--primary {
+  background: var(--ink);
+  color: var(--inverse-text);
+}
+
+.btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.32) 45%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.55s var(--ease);
+  z-index: -1;
+}
+
+.btn--primary:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.btn--primary:hover::before {
+  transform: translateX(120%);
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  color: var(--ink);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  background: rgba(var(--accent-rgb), 0.06);
+  transform: translateY(-2px);
+}
+
+.btn--text {
+  min-height: auto;
+  padding: 0;
+  overflow: visible;
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.btn--text::after {
+  content: "→";
+  transition: transform 0.3s var(--ease);
+}
+
+.btn--text:hover {
+  color: var(--accent);
+}
+
+.btn--text:hover::after {
+  transform: translateX(5px);
+}

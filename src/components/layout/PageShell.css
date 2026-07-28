@@ -1,0 +1,21 @@
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.page-shell > .page {
+  flex: 1;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 2px;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-ink));
+  pointer-events: none;
+}

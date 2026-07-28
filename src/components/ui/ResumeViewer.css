@@ -1,0 +1,122 @@
+.resume-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.resume-viewer__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.resume-viewer__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: min(920px, 100%);
+  height: min(92svh, 1100px);
+  border-radius: 1.15rem;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-deep);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+
+.resume-viewer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.resume-viewer__title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.resume-viewer__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.resume-viewer__link,
+.resume-viewer__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.15rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  transition:
+    background 0.25s var(--ease),
+    border-color 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+
+.resume-viewer__link:hover,
+.resume-viewer__close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.resume-viewer__close {
+  background: var(--ink);
+  color: var(--inverse-text);
+  border-color: var(--ink);
+}
+
+.resume-viewer__close:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.resume-viewer__frame {
+  min-height: 0;
+  background: #111;
+}
+
+.resume-viewer__frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #fff;
+}
+
+@media (max-width: 640px) {
+  .resume-viewer {
+    padding: 0.5rem;
+  }
+
+  .resume-viewer__panel {
+    height: 94svh;
+    border-radius: 0.9rem;
+  }
+
+  .resume-viewer__title {
+    width: 100%;
+  }
+}

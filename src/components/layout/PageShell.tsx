@@ -1,0 +1,37 @@
+import { useEffect } from "react"
+import { Outlet, useLocation } from "react-router-dom"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { Navbar } from "./Navbar"
+import { Footer } from "./Footer"
+import { ResumeProvider } from "../ui/ResumeViewer"
+import { ScrollProgress } from "../../hooks/useMotion"
+import "./PageShell.css"
+
+export function PageShell() {
+  const location = useLocation()
+  const reduce = useReducedMotion()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+
+  return (
+    <ResumeProvider>
+      <ScrollProgress />
+      <Navbar />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          className="page-shell"
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduce ? undefined : { opacity: 0, y: -8 }}
+          transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
+        >
+          <Outlet />
+          <Footer />
+        </motion.div>
+      </AnimatePresence>
+    </ResumeProvider>
+  )
+}

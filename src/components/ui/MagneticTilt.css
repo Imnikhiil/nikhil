@@ -1,0 +1,10 @@
+.tilt {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tilt {
+    will-change: transform;
+  }
+}
