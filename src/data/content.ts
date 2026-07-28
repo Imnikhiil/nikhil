@@ -81,7 +81,7 @@ export const site = {
   resumeUrl: "/Nikhil-Kumar-CV.pdf",
   ogImage: "/og.jpg",
   /** Update this after deploy (Vercel/Netlify/custom domain). */
-  url: "https://imyournikhil.vercel.app",
+  url: "https://nikhil-portfolio-pink.vercel.app",
 }
 
 export const navLinks: NavLink[] = [
