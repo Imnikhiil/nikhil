@@ -48,6 +48,11 @@ export function Seo({ title, description, path = "", image = site.ogImage }: Seo
     upsertMeta("property", "og:description", description)
     upsertMeta("property", "og:url", url)
     upsertMeta("property", "og:image", imageUrl)
+    upsertMeta("property", "og:image:secure_url", imageUrl)
+    upsertMeta("property", "og:image:type", "image/jpeg")
+    upsertMeta("property", "og:image:width", "1200")
+    upsertMeta("property", "og:image:height", "630")
+    upsertMeta("property", "og:image:alt", fullTitle)
 
     upsertLink("canonical", url)
   }, [title, description, path, image])

@@ -80,8 +80,8 @@ export const site = {
   },
   resumeUrl: "/Nikhil-Kumar-CV.pdf",
   ogImage: "/og.jpg",
-  /** Update this after deploy (Vercel/Netlify/custom domain). */
-  url: "https://nikhil-portfolio-pink.vercel.app",
+  /** Production domain — keep in sync with Vercel + index.html OG tags. */
+  url: "https://imyournikhil.vercel.app",
 }
 
 export const navLinks: NavLink[] = [
