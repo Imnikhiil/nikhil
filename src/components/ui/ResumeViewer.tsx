@@ -94,7 +94,7 @@ export function ResumeProvider({ children }: { children: ReactNode }) {
                   >
                     Open tab
                   </a>
-                  <a className="resume-viewer__link" href={site.resumeUrl} download="Nikhil-Kumar-CV.pdf">
+                  <a className="resume-viewer__link" href={site.resumeUrl} download="Nikhil_Kumar_Resume_2026.pdf">
                     Download
                   </a>
                   <button type="button" className="resume-viewer__close" onClick={close}>

@@ -12,6 +12,8 @@ const SWAP_MS = 720
 const frontPose = { x: 0, y: 0, rotate: 0, scale: 1, zIndex: 4 }
 const backPoseLeft = { x: -42, y: 18, rotate: -14, scale: 0.93, zIndex: 1 }
 const backPoseRight = { x: 42, y: 18, rotate: 14, scale: 0.93, zIndex: 1 }
+const backPoseLeftMobile = { x: -18, y: 10, rotate: -8, scale: 0.96, zIndex: 1 }
+const backPoseRightMobile = { x: 18, y: 10, rotate: 8, scale: 0.96, zIndex: 1 }
 
 function swapTransition(toFront: boolean) {
   return {
@@ -67,6 +69,8 @@ export function IdCard() {
 
   const profileFront = front === "profile"
   const canFloat = !reduce && fine
+  const leftBack = fine ? backPoseLeft : backPoseLeftMobile
+  const rightBack = fine ? backPoseRight : backPoseRightMobile
 
   return (
     <motion.div
@@ -98,10 +102,10 @@ export function IdCard() {
           type="button"
           className={`badge__card badge__card--skills ${profileFront ? "is-back" : "is-front"}`}
           initial={false}
-          animate={profileFront ? backPoseLeft : frontPose}
+          animate={profileFront ? leftBack : frontPose}
           transition={reduce ? { duration: 0 } : swapTransition(!profileFront)}
           onClick={swap}
-          whileHover={reduce || busy ? undefined : { y: profileFront ? 14 : -4 }}
+          whileHover={fine && !reduce && !busy ? { y: profileFront ? 14 : -4 } : undefined}
           aria-label="Swap ID cards"
         >
           <span className="badge__hole" aria-hidden />
@@ -156,10 +160,10 @@ export function IdCard() {
           type="button"
           className={`badge__card badge__card--profile ${profileFront ? "is-front" : "is-back"}`}
           initial={false}
-          animate={profileFront ? frontPose : backPoseRight}
+          animate={profileFront ? frontPose : rightBack}
           transition={reduce ? { duration: 0 } : swapTransition(profileFront)}
           onClick={swap}
-          whileHover={reduce || busy ? undefined : { y: profileFront ? -4 : 14 }}
+          whileHover={fine && !reduce && !busy ? { y: profileFront ? -4 : 14 } : undefined}
           aria-label="Swap ID cards"
         >
           <span className="badge__hole" aria-hidden />
