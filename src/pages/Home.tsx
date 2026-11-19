@@ -1,10 +1,10 @@
 ﻿import { motion, useReducedMotion } from "framer-motion"
+import { useState, type PointerEvent } from "react"
 import { Link } from "react-router-dom"
 import {
+  experience,
   focusAreas,
   homeCreds,
-  homeMotive,
-  idCardBack,
   processSteps,
   projects,
   site,
@@ -14,12 +14,35 @@ import { Button } from "../components/ui/Button"
 import { IdCard } from "../components/ui/IdCard"
 import { ResumeButton } from "../components/ui/ResumeViewer"
 import { Seo } from "../components/Seo"
-import { Reveal, TextReveal, useFinePointer } from "../hooks/useMotion"
+import { Reveal, useFinePointer } from "../hooks/useMotion"
+import { introDelay } from "../lib/intro"
 import "./Home.css"
+import "./HomeHero.css"
+
+const heroSkills = [
+  "React",
+  "TypeScript",
+  "Next.js",
+  "Node.js",
+  "Express",
+  "MongoDB",
+  "PostgreSQL",
+  "Framer Motion",
+]
+
+const internships = experience.filter((e) => /intern/i.test(e.role)).length
+
+const heroStats = [
+  { value: String(projects.length).padStart(2, "0"), label: "Live projects" },
+  { value: String(internships).padStart(2, "0"), label: "Internships" },
+  { value: "2023–26", label: "DSEU · CSE Diploma" },
+]
 
 export function HomePage() {
   const reduce = useReducedMotion()
   const fine = useFinePointer()
+  // Hero starts after the preloader on first visit; instantly on later visits.
+  const [base] = useState(() => introDelay())
 
   const fade = (delay: number) =>
     reduce
@@ -27,91 +50,92 @@ export function HomePage() {
       : {
           initial: { opacity: 0, y: 24 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.55, delay, ease: [0.2, 0.8, 0.2, 1] as const },
+          transition: { duration: 0.7, delay: base + delay, ease: [0.16, 1, 0.3, 1] as const },
         }
+
+  const rise = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { y: "110%" },
+          animate: { y: 0 },
+          transition: { duration: 0.95, delay: base + delay, ease: [0.16, 1, 0.3, 1] as const },
+        }
+
+  const onMove = (e: PointerEvent<HTMLElement>) => {
+    if (!fine || reduce) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`)
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`)
+  }
 
   return (
     <main className="page home">
       <Seo title={`${site.fullName} — ${site.title}`} description={site.tagline} path="/" />
 
-      <section className="home__hero">
-        <div className="home__bleed" aria-hidden>
-          <span className="home__grid" />
+      <section className="hero" onPointerMove={onMove}>
+        <div className="hero__bleed" aria-hidden>
+          <span className="hero__grid" />
+          <span className="hero__spot" />
         </div>
 
-        <div className="container home__layout">
-          <div className="home__stage">
-            <motion.p className="home__role" {...fade(0.05)}>
-              {site.title}
+        <div className="container hero__layout">
+          <div className="hero__stage">
+            <motion.p className="hero__badge" {...fade(0.05)}>
+              <span className="hero__pulse" aria-hidden />
+              Open for work · {site.location}
             </motion.p>
 
-            <h1 className="home__name">
-              <TextReveal text={site.name} delay={0.12} />
+            <h1 className="hero__name" aria-label={site.fullName}>
+              <span className="hero__mask" aria-hidden>
+                <motion.span className="hero__word" {...rise(0.12)}>
+                  Nikhil
+                </motion.span>
+              </span>
+              <span className="hero__mask" aria-hidden>
+                <motion.span className="hero__word hero__word--serif" {...rise(0.24)}>
+                  Kumar.
+                </motion.span>
+              </span>
             </h1>
 
-            <motion.p className="home__line" {...fade(0.34)}>
+            <motion.p className="hero__role" {...fade(0.42)}>
+              <span>{site.title}</span>
+              <i aria-hidden />
+              <span>Frontend · Backend · Product</span>
+            </motion.p>
+
+            <motion.p className="hero__tagline" {...fade(0.5)}>
               {site.tagline}
             </motion.p>
 
-            <motion.div className="home__cta" {...fade(0.45)}>
+            <motion.div className="hero__cta" {...fade(0.58)}>
               <Button to="/work">See the work</Button>
               <ResumeButton variant="ghost">Resume</ResumeButton>
             </motion.div>
 
-            <motion.figure className="home__code home__code--hero" {...fade(0.52)} aria-label="Coding motive">
-              <div className="home__code-bar">
-                <span className="home__code-dots" aria-hidden>
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span className="home__code-file">{homeMotive.file}</span>
-              </div>
-              <pre className="home__code-body">
-                <code>
-                  <span className="home__code-line">
-                    <span className="tok-c">{`<!-- ${homeMotive.comment} -->`}</span>
-                  </span>
-                  <span className="home__code-line">
-                    <span>
-                      <span className="tok-p">&lt;</span>
-                      <span className="tok-t">h1</span>
-                      <span className="tok-p">&gt;</span>
-                      <span className="tok-x">{homeMotive.headline}</span>
-                      <span className="tok-p">&lt;/</span>
-                      <span className="tok-t">h1</span>
-                      <span className="tok-p">&gt;</span>
-                    </span>
-                  </span>
-                  <span className="home__code-line">
-                    <span>
-                      <span className="tok-p">&lt;</span>
-                      <span className="tok-t">p</span>
-                      <span className="tok-p">&gt;</span>
-                      <span className="tok-x">{homeMotive.line}</span>
-                      <span className="tok-p">&lt;/</span>
-                      <span className="tok-t">p</span>
-                      <span className="tok-p">&gt;</span>
-                      <span className="tok-cursor" aria-hidden />
-                    </span>
-                  </span>
-                </code>
-              </pre>
-            </motion.figure>
-
-            <motion.div className="home__marquee" {...fade(0.6)} aria-hidden>
-              <div className="home__marquee-track">
-                {[...idCardBack.highlights, ...idCardBack.highlights].map((skill, i) => (
-                  <span key={`${skill}-${i}`}>{skill}</span>
-                ))}
-              </div>
-            </motion.div>
+            <motion.dl className="hero__stats" {...fade(0.68)}>
+              {heroStats.map((stat) => (
+                <div key={stat.label} className="hero__stat">
+                  <dt>{stat.label}</dt>
+                  <dd className="text-gradient">{stat.value}</dd>
+                </div>
+              ))}
+            </motion.dl>
           </div>
 
-          <div className="home__card">
+          <div className="home__card hero__card">
             <IdCard />
           </div>
         </div>
+
+        <motion.div className="home__marquee hero__marquee" {...fade(0.8)} aria-hidden>
+          <div className="home__marquee-track">
+            {[...heroSkills, ...heroSkills].map((skill, i) => (
+              <span key={`${skill}-${i}`}>{skill}</span>
+            ))}
+          </div>
+        </motion.div>
       </section>
 
       <section className="home__band home__creds">

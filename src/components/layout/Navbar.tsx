@@ -23,16 +23,6 @@ export function Navbar() {
           {site.name}
         </Link>
 
-        <button
-          className={`nav__toggle ${open ? "is-open" : ""}`}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span />
-          <span />
-        </button>
-
         <nav className={`nav__links ${open ? "is-open" : ""}`} aria-label="Primary">
           {navLinks.map((link) => (
             <NavLink
@@ -46,6 +36,20 @@ export function Navbar() {
             </NavLink>
           ))}
         </nav>
+
+        <Link className="nav__cta" to="/contact" onClick={() => setOpen(false)}>
+          Let&rsquo;s talk
+        </Link>
+
+        <button
+          className={`nav__toggle ${open ? "is-open" : ""}`}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span />
+          <span />
+        </button>
       </div>
     </header>
   )
