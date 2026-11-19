@@ -1,24 +1,43 @@
 :root {
-  --bg: #000000;
-  --bg-deep: #050505;
-  --ink: #f5f5f5;
-  --ink-soft: #c8c8c8;
-  --muted: #8a8a8a;
-  --line: rgba(255, 255, 255, 0.1);
-  --line-strong: rgba(255, 255, 255, 0.18);
-  --accent: #ff6233;
-  --accent-ink: #ff8a5c;
-  --accent-rgb: 255, 98, 51;
-  --paper: #0a0a0a;
-  --paper-lift: #111111;
-  --inverse: #f5f5f5;
-  --inverse-text: #000000;
+  /* Surfaces: deep ink instead of flat black */
+  --bg: #07070a;
+  --bg-deep: #040406;
+  --paper: #0d0d12;
+  --paper-lift: #14141b;
+
+  /* Text */
+  --ink: #f4f3f1;
+  --ink-soft: #c9c9d0;
+  --muted: #8b8b97;
+  --inverse: #f4f3f1;
+  --inverse-text: #07070a;
+
+  /* Lines */
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  /* Accent: warm coral -> amber */
+  --accent: #ff6a3d;
+  --accent-ink: #ffa36b;
+  --accent-2: #ffb347;
+  --accent-rgb: 255, 106, 61;
+  --accent-2-rgb: 255, 179, 71;
+  --gradient-accent: linear-gradient(120deg, #ff6a3d 0%, #ffb347 100%);
   --success: #4ecf8e;
 
+  /* Glass */
+  --glass: rgba(255, 255, 255, 0.035);
+  --glass-strong: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --blur: blur(18px) saturate(140%);
+
+  /* Fonts */
   --font-display: "Space Grotesk", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
   --font-body: "DM Sans", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
+  /* Spacing */
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
   --space-md: 1.25rem;
@@ -27,14 +46,22 @@
   --space-2xl: 5.5rem;
   --space-3xl: 8rem;
 
-  --radius-sm: 0.55rem;
-  --radius-md: 0.9rem;
-  --radius-lg: 1.25rem;
+  /* Radius */
+  --radius-sm: 0.6rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
 
+  /* Layout */
   --container: 1180px;
   --nav-h: 4rem;
+
+  /* Motion */
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Shadows & glow */
   --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 0 1px rgba(var(--accent-rgb), 0.25), 0 12px 50px rgba(var(--accent-rgb), 0.18);
 
   color-scheme: dark;
 }
