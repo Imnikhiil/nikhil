@@ -1,0 +1,150 @@
+/* Dark Luxe additions for the project detail page (loads after ProjectDetail.css) */
+
+.project {
+  position: relative;
+}
+
+/* Accent glow at the top, tinted per project */
+.project::before {
+  content: "";
+  position: absolute;
+  inset: -4rem 0 auto;
+  height: 30rem;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    50% 60% at 18% 0%,
+    color-mix(in srgb, var(--p-accent) 24%, transparent),
+    transparent 70%
+  );
+}
+
+.project__back {
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  transition:
+    color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+
+.project__back:hover {
+  border-color: rgba(var(--accent-rgb), 0.45);
+}
+
+.project__meta-row {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--accent-ink);
+}
+
+.project__title {
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.project__metric-value {
+  color: var(--p-accent, var(--accent));
+}
+
+/* Parallax hero image */
+.project__parallax {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Next project */
+.project__next {
+  margin-top: 1rem;
+}
+
+.project__next-label {
+  margin-bottom: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.project__next-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-block: 1.75rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transition: border-color 0.35s var(--ease);
+}
+
+.project__next-link:hover {
+  border-color: color-mix(in srgb, var(--p-accent) 55%, var(--line-strong));
+}
+
+.project__next-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 7vw, 4.8rem);
+  letter-spacing: -0.055em;
+  line-height: 1;
+  transition:
+    transform 0.55s var(--ease-out-expo),
+    color 0.35s var(--ease);
+}
+
+.project__next-link:hover .project__next-title {
+  transform: translateX(0.6rem);
+  color: var(--p-accent);
+}
+
+.project__next-arrow {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  color: var(--muted);
+  transition:
+    transform 0.55s var(--ease-out-expo),
+    color 0.35s var(--ease);
+}
+
+.project__next-link:hover .project__next-arrow {
+  transform: translateX(0.5rem);
+  color: var(--p-accent);
+}
+
+.project__next-thumb {
+  position: absolute;
+  right: 12%;
+  top: 50%;
+  width: 15rem;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  transform: translateY(-46%) rotate(-5deg) scale(0.92);
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.6s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.project__next-link:hover .project__next-thumb {
+  opacity: 1;
+  transform: translateY(-50%) rotate(-3deg) scale(1);
+}
+
+@media (max-width: 860px), (hover: none) {
+  .project__next-thumb {
+    display: none;
+  }
+}

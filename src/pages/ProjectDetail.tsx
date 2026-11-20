@@ -1,9 +1,29 @@
+import { useRef } from "react"
 import { Link, Navigate, useParams } from "react-router-dom"
-import { motion, useReducedMotion } from "framer-motion"
-import { getProject, testimonials } from "../data/content"
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
+import { getProject, projects, testimonials } from "../data/content"
 import { Seo } from "../components/Seo"
 import { Reveal } from "../hooks/useMotion"
 import "./ProjectDetail.css"
+import "./ProjectDetailExtra.css"
+
+function ParallaxImage({ src, alt, reduce }: { src: string; alt: string; reduce: boolean | null }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const y = useTransform(scrollYProgress, [0, 1], ["-7%", "7%"])
+
+  return (
+    <div ref={ref} className="project__parallax">
+      <motion.img
+        src={src}
+        alt={alt}
+        style={reduce ? undefined : { y, scale: 1.14 }}
+        whileHover={reduce ? undefined : { scale: 1.19 }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </div>
+  )
+}
 
 export function ProjectDetailPage() {
   const { slug } = useParams()
@@ -15,6 +35,7 @@ export function ProjectDetailPage() {
   }
 
   const live = project.liveUrl
+  const next = projects[(projects.findIndex((p) => p.slug === project.slug) + 1) % projects.length]
   const quote =
     testimonials.find((t) => t.name.toLowerCase().includes(project.title.split(" ")[0].toLowerCase())) ??
     testimonials[0]
@@ -30,7 +51,7 @@ export function ProjectDetailPage() {
         }
 
   return (
-    <main className="page project">
+    <main className="page project" style={{ ["--p-accent" as string]: project.accent }}>
       <Seo
         title={project.title}
         description={project.tagline}
@@ -77,15 +98,10 @@ export function ProjectDetailPage() {
                 rel="noreferrer"
                 aria-label={`Open ${project.title} live site`}
               >
-                <motion.img
-                  src={project.image}
-                  alt={`${project.title} preview`}
-                  whileHover={reduce ? undefined : { scale: 1.05 }}
-                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-                />
+                <ParallaxImage src={project.image} alt={`${project.title} preview`} reduce={reduce} />
               </a>
             ) : (
-              <img src={project.image} alt={`${project.title} preview`} />
+              <ParallaxImage src={project.image} alt={`${project.title} preview`} reduce={reduce} />
             )}
             <div className="project__tile-badges">
               {live ? <span className="project__badge project__badge--live">Live</span> : null}
@@ -178,6 +194,22 @@ export function ProjectDetailPage() {
         <Reveal className="project__context" delay={0.12}>
           <h2>Context</h2>
           <p>{project.description}</p>
+        </Reveal>
+
+        <Reveal className="project__next" delay={0.08}>
+          <p className="project__next-label">Next project</p>
+          <Link
+            to={`/work/${next.slug}`}
+            className="project__next-link"
+            data-cursor="view"
+            style={{ ["--p-accent" as string]: next.accent }}
+          >
+            <span className="project__next-title">{next.title}</span>
+            <span className="project__next-arrow" aria-hidden>
+              →
+            </span>
+            <img className="project__next-thumb" src={next.image} alt="" loading="lazy" />
+          </Link>
         </Reveal>
       </div>
     </main>

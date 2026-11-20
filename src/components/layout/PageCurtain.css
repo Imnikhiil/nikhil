@@ -1,0 +1,29 @@
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background:
+    radial-gradient(45% 40% at 50% 50%, rgba(var(--accent-rgb), 0.16), transparent 70%),
+    var(--bg-deep);
+}
+
+.curtain__mark {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 4px;
+  background: var(--gradient-accent);
+  box-shadow: 0 0 28px rgba(var(--accent-rgb), 0.8);
+  animation: curtainSpin 1.2s var(--ease-out-expo) infinite;
+}
+
+@keyframes curtainSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}

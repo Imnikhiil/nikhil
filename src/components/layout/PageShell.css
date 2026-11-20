@@ -1,39 +1,21 @@
-import { useEffect } from "react"
-import { Outlet, useLocation } from "react-router-dom"
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
-import { Navbar } from "./Navbar"
-import { Footer } from "./Footer"
-import { ResumeProvider } from "../ui/ResumeViewer"
-import { Preloader } from "../ui/Preloader"
-import { ScrollProgress } from "../../hooks/useMotion"
-import "./PageShell.css"
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
 
-export function PageShell() {
-  const location = useLocation()
-  const reduce = useReducedMotion()
+.page-shell > .page {
+  flex: 1;
+}
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [location.pathname])
-
-  return (
-    <ResumeProvider>
-      <Preloader />
-      <ScrollProgress />
-      <Navbar />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          className="page-shell"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={reduce ? undefined : { opacity: 0, y: -8 }}
-          transition={{ duration: 0.28, ease: [0.2, 0.8, 0.2, 1] }}
-        >
-          <Outlet />
-          <Footer />
-        </motion.div>
-      </AnimatePresence>
-    </ResumeProvider>
-  )
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 2px;
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-ink));
+  pointer-events: none;
 }
