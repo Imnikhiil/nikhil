@@ -14,8 +14,12 @@ export function NotFoundPage() {
 
       <div className="container not-found__stage">
         <Reveal>
-          <p className="not-found__code">404</p>
-          <h1 className="not-found__title">Page missing.</h1>
+          <p className="not-found__code" aria-hidden>
+            404
+          </p>
+          <h1 className="not-found__title">
+            Page <em>missing.</em>
+          </h1>
           <p className="not-found__lead">
             That route doesn’t exist — or it moved. Pick a clear next step.
           </p>

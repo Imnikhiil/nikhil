@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 import {
   experience,
   focusAreas,
-  homeCreds,
   processSteps,
   projects,
   site,
@@ -18,6 +17,7 @@ import { Reveal, useFinePointer } from "../hooks/useMotion"
 import { introDelay } from "../lib/intro"
 import "./Home.css"
 import "./HomeHero.css"
+import "./HomeSections.css"
 
 const heroSkills = [
   "React",
@@ -138,166 +138,177 @@ export function HomePage() {
         </motion.div>
       </section>
 
-      <section className="home__band home__creds">
-        <div className="container home__creds-row">
-          {homeCreds.map((item, i) => (
-            <Reveal key={item.label} className="home__cred" delay={i * 0.06}>
-              <span className="home__cred-label">{item.label}</span>
-              <span className="home__cred-value">{item.value}</span>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="home__band">
+      <section className="hs-section">
         <div className="container">
-          <Reveal className="home__section-head">
-            <p className="home__section-label">Process</p>
-            <h2 className="home__section-title">How projects move.</h2>
-          </Reveal>
-
-          <div className="home__process">
-            {processSteps.map((step, i) => (
-              <Reveal key={step.title} className="home__process-step" delay={i * 0.08} y={36}>
-                <span className="home__process-index">0{i + 1}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-                {i < processSteps.length - 1 ? (
-                  <span className="home__process-arrow" aria-hidden>
-                    →
-                  </span>
-                ) : null}
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="home__band">
-        <div className="container">
-          <Reveal className="home__section-head">
-            <p className="home__section-label">Selected work</p>
-            <div className="home__section-row">
-              <h2 className="home__section-title">Live work I've shipped.</h2>
+          <Reveal className="hs-head">
+            <p className="hs-label">Selected work</p>
+            <div className="hs-head__row">
+              <h2 className="hs-title">
+                Live work I’ve <em>shipped.</em>
+              </h2>
               <Button to="/work" variant="text">
                 View all
               </Button>
             </div>
           </Reveal>
 
-          <div className="home__projects">
+          <div className="hs-projects">
             {projects.map((project, i) => {
               const href = project.liveUrl ?? `/work/${project.slug}`
               const external = Boolean(project.liveUrl)
 
               return (
-                <Reveal key={project.slug} delay={i * 0.08}>
-                  <motion.article
-                    className="home__project"
-                    style={{ ["--p-accent" as string]: project.accent }}
-                    whileHover={fine && !reduce ? { y: -6, scale: 1.01 } : undefined}
-                    transition={{ type: "spring", stiffness: 340, damping: 26 }}
+                <motion.article
+                  key={project.slug}
+                  className="hs-project"
+                  style={{ ["--p-accent" as string]: project.accent, ["--i" as string]: i }}
+                  {...(reduce
+                    ? {}
+                    : {
+                        initial: { opacity: 0, y: 40 },
+                        whileInView: { opacity: 1, y: 0 },
+                        viewport: { once: true, amount: 0.15 },
+                        transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
+                      })}
+                >
+                  <a
+                    className="hs-project__visual"
+                    href={href}
+                    data-cursor="view"
+                    {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+                    aria-label={`Open ${project.title}${external ? " live site" : ""}`}
                   >
-                    <a
-                      className="home__project-hit"
-                      href={href}
-                      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-                      aria-label={`Open ${project.title}${external ? " live site" : ""}`}
-                    >
-                      <div className="home__project-visual">
-                        <img src={project.image} alt="" loading="lazy" />
-                        <div className="home__project-badges">
-                          {project.liveUrl ? (
-                            <span className="home__project-badge home__project-badge--live">Live</span>
-                          ) : null}
+                    <img src={project.image} alt="" loading="lazy" />
+                    <span className="hs-project__index" aria-hidden>
+                      {String(i + 1).padStart(2, "0")}
+                      <small>/ {String(projects.length).padStart(2, "0")}</small>
+                    </span>
+                    {project.liveUrl ? <span className="hs-project__live">Live</span> : null}
+                  </a>
+
+                  <div className="hs-project__body">
+                    <div className="hs-project__meta">
+                      <span>{project.year}</span>
+                      <span>{project.role}</span>
+                    </div>
+                    <h3>{project.title}</h3>
+                    <p>{project.tagline}</p>
+
+                    <div className="hs-project__tags">
+                      {project.tags.slice(0, 4).map((tag) => (
+                        <span key={tag}>{tag}</span>
+                      ))}
+                    </div>
+
+                    <div className="hs-project__metrics">
+                      {project.metrics.map((metric) => (
+                        <div key={metric.label}>
+                          <strong>{metric.value}</strong>
+                          <span>{metric.label}</span>
                         </div>
-                      </div>
-                      <div className="home__project-body">
-                        <div className="home__project-meta">
-                          <span>{project.year}</span>
-                          <span>{project.role}</span>
-                        </div>
-                        <h3>{project.title}</h3>
-                        <p>{project.tagline}</p>
-                        <div className="home__project-metrics">
-                          {project.metrics.map((metric) => (
-                            <span key={metric.label}>
-                              <strong>{metric.value}</strong> {metric.label}
-                            </span>
-                          ))}
-                        </div>
-                        <span className="home__project-cta">
-                          {external ? "View site" : "View project"}
-                          <span aria-hidden>→</span>
-                        </span>
-                      </div>
-                    </a>
-                    <Link to={`/work/${project.slug}`} className="home__project-detail">
-                      Details
-                    </Link>
-                  </motion.article>
-                </Reveal>
+                      ))}
+                    </div>
+
+                    <div className="hs-project__links">
+                      <a
+                        className="hs-project__cta"
+                        href={href}
+                        {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
+                      >
+                        {external ? "View site" : "View project"} <span aria-hidden>→</span>
+                      </a>
+                      <Link to={`/work/${project.slug}`} className="hs-project__case">
+                        Case study
+                      </Link>
+                    </div>
+                  </div>
+                </motion.article>
               )
             })}
           </div>
         </div>
       </section>
 
-      <section className="home__band">
+      <section className="hs-section">
         <div className="container">
-          <Reveal className="home__section-head">
-            <p className="home__section-label">What I do</p>
-            <h2 className="home__section-title">Three lanes. One standard.</h2>
+          <Reveal className="hs-head">
+            <p className="hs-label">What I do</p>
+            <h2 className="hs-title">
+              Three lanes. <em>One standard.</em>
+            </h2>
           </Reveal>
 
-          <div className="home__focus">
+          <div className="hs-focus">
             {focusAreas.map((area, i) => (
-              <Reveal key={area.title} className="home__focus-item" delay={i * 0.08}>
-                <span className="home__focus-index">0{i + 1}</span>
-                <h3>{area.title}</h3>
-                <p>{area.text}</p>
+              <Reveal key={area.title} delay={i * 0.08}>
+                <div className="hs-card">
+                  <span className="hs-card__n">{String(i + 1).padStart(2, "0")}</span>
+                  <h3>{area.title}</h3>
+                  <p>{area.text}</p>
+                </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="home__band">
+      <section className="hs-section">
         <div className="container">
-          <Reveal className="home__section-head">
-            <p className="home__section-label">Words</p>
-            <h2 className="home__section-title">From people I've built with.</h2>
+          <Reveal className="hs-head">
+            <p className="hs-label">Process</p>
+            <h2 className="hs-title">
+              How projects <em>move.</em>
+            </h2>
           </Reveal>
 
-          <div className="home__quotes">
+          <div className="hs-process">
+            {processSteps.map((step, i) => (
+              <Reveal key={step.title} delay={i * 0.08}>
+                <div className="hs-step">
+                  <span className="hs-step__n">{String(i + 1).padStart(2, "0")}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="hs-section">
+        <div className="container">
+          <Reveal className="hs-head">
+            <p className="hs-label">Words</p>
+            <h2 className="hs-title">
+              From people I’ve <em>built with.</em>
+            </h2>
+          </Reveal>
+
+          <div className="hs-quotes">
             {testimonials.map((item, i) => (
-              <Reveal key={item.name} className="home__quote" delay={i * 0.08}>
-                <p className="home__quote-mark" aria-hidden>
-                  "
-                </p>
-                <blockquote>{item.quote}</blockquote>
-                <footer>
-                  <strong>{item.name}</strong>
-                  <span>{item.role}</span>
-                </footer>
+              <Reveal key={item.name} delay={i * 0.08}>
+                <figure className="hs-quote">
+                  <span className="hs-quote__mark" aria-hidden>
+                    “
+                  </span>
+                  <blockquote>{item.quote}</blockquote>
+                  <figcaption>
+                    <span className="hs-quote__avatar" aria-hidden>
+                      {item.name
+                        .split(" ")
+                        .map((w) => w[0])
+                        .slice(0, 2)
+                        .join("")}
+                    </span>
+                    <span>
+                      <strong>{item.name}</strong>
+                      <small>{item.role}</small>
+                    </span>
+                  </figcaption>
+                </figure>
               </Reveal>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="home__band home__cta-band">
-        <div className="container">
-          <Reveal className="home__cta-panel">
-            <div>
-              <p className="home__section-label">Next</p>
-              <h2 className="home__cta-title">Have a project in mind?</h2>
-              <p className="home__cta-lead">
-                Tell me what you're building — I'll reply with a clear yes, no, or better approach.
-              </p>
-            </div>
-            <Button to="/contact">Let's talk</Button>
-          </Reveal>
         </div>
       </section>
     </main>

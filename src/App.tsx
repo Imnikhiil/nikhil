@@ -1,12 +1,21 @@
+import { lazy } from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { PageShell } from "./components/layout/PageShell"
-import { AboutPage } from "./pages/About"
-import { ContactPage } from "./pages/Contact"
-import { ExperiencePage } from "./pages/Experience"
 import { HomePage } from "./pages/Home"
-import { NotFoundPage } from "./pages/NotFound"
-import { ProjectDetailPage } from "./pages/ProjectDetail"
-import { WorkPage } from "./pages/Work"
+
+// Home loads instantly; the other pages are split into their own chunks
+const WorkPage = lazy(() => import("./pages/Work").then((m) => ({ default: m.WorkPage })))
+const ProjectDetailPage = lazy(() =>
+  import("./pages/ProjectDetail").then((m) => ({ default: m.ProjectDetailPage })),
+)
+const AboutPage = lazy(() => import("./pages/About").then((m) => ({ default: m.AboutPage })))
+const ExperiencePage = lazy(() =>
+  import("./pages/Experience").then((m) => ({ default: m.ExperiencePage })),
+)
+const ContactPage = lazy(() => import("./pages/Contact").then((m) => ({ default: m.ContactPage })))
+const NotFoundPage = lazy(() =>
+  import("./pages/NotFound").then((m) => ({ default: m.NotFoundPage })),
+)
 
 export default function App() {
   return (

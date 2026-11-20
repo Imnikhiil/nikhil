@@ -14,3 +14,12 @@ export function scrollToTop() {
     window.scrollTo(0, 0)
   }
 }
+
+/** Glide to top (used by the footer "Back to top" button). */
+export function scrollToTopSmooth() {
+  if (instance) {
+    instance.scrollTo(0, { duration: 1.4 })
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+}
