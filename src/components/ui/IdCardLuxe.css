@@ -23,9 +23,6 @@
 .badge__strap {
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0%, transparent 35%, transparent 62%, rgba(0, 0, 0, 0.4) 100%),
     repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 7px),
@@ -50,9 +47,13 @@
   right: 0.18rem;
 }
 
+/* Absolute so the long text never changes the strap's height */
 .badge__strap-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  transform: translate(-50%, -50%) rotate(180deg);
   white-space: nowrap;
   font-family: var(--font-mono);
   font-size: 0.5rem;
