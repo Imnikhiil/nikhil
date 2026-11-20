@@ -1,8 +1,15 @@
-import { useState } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { useState, type PointerEvent as ReactPointerEvent } from "react"
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion"
 import { idCardBack, site } from "../../data/content"
 import { useFinePointer } from "../../hooks/useMotion"
 import "./IdCard.css"
+import "./IdCardLuxe.css"
 
 type CardId = "profile" | "skills"
 
@@ -72,6 +79,40 @@ export function IdCard() {
   const leftBack = fine ? backPoseLeft : backPoseLeftMobile
   const rightBack = fine ? backPoseRight : backPoseRightMobile
 
+  // 3D tilt + pendulum swing + holographic foil (desktop mouse only)
+  const px = useMotionValue(0)
+  const py = useMotionValue(0)
+  const zero = useMotionValue(0)
+  const springCfg = { stiffness: 140, damping: 16, mass: 0.6 }
+  const sx = useSpring(px, springCfg)
+  const sy = useSpring(py, springCfg)
+  const rotateY = useTransform(sx, [-0.5, 0.5], [-13, 13])
+  const rotateX = useTransform(sy, [-0.5, 0.5], [10, -10])
+  const swing = useTransform(sx, [-0.5, 0.5], [-3, 3])
+  const tiltX = canFloat ? rotateX : zero
+  const tiltY = canFloat ? rotateY : zero
+
+  const onMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (!canFloat || busy) return
+    const el = e.currentTarget
+    const rect = el.getBoundingClientRect()
+    const nx = (e.clientX - rect.left) / rect.width - 0.5
+    const ny = (e.clientY - rect.top) / rect.height - 0.5
+    px.set(nx)
+    py.set(ny)
+    el.style.setProperty("--fx", `${(nx + 0.5) * 100}%`)
+    el.style.setProperty("--fy", `${(ny + 0.5) * 100}%`)
+    el.style.setProperty("--fa", `${(nx + 0.5) * 360}deg`)
+  }
+
+  const onLeave = () => {
+    px.set(0)
+    py.set(0)
+  }
+
+  const [firstName, ...restName] = site.fullName.split(" ")
+  const strapText = Array.from({ length: 6 }, () => `${site.fullName} · ${site.title}`).join(" · ")
+
   return (
     <motion.div
       className="badge"
@@ -91,17 +132,29 @@ export function IdCard() {
       }
     >
       <div className="badge__lanyard" aria-hidden>
-        <span className="badge__strap" />
+        <span className="badge__strap">
+          <span className="badge__strap-text">{strapText}</span>
+        </span>
         <div className="badge__mount">
           <LanyardMount />
         </div>
       </div>
 
-      <div className={`badge__stack ${busy ? "is-swapping" : ""}`}>
+      <motion.div
+        className={`badge__stack ${busy ? "is-swapping" : ""}`}
+        style={canFloat ? { rotate: swing, transformOrigin: "50% 0%" } : undefined}
+        onPointerMove={onMove}
+        onPointerLeave={onLeave}
+      >
         <motion.button
           type="button"
           className={`badge__card badge__card--skills ${profileFront ? "is-back" : "is-front"}`}
           initial={false}
+          style={{
+            rotateX: profileFront ? zero : tiltX,
+            rotateY: profileFront ? zero : tiltY,
+            transformPerspective: 900,
+          }}
           animate={profileFront ? leftBack : frontPose}
           transition={reduce ? { duration: 0 } : swapTransition(!profileFront)}
           onClick={swap}
@@ -110,6 +163,7 @@ export function IdCard() {
         >
           <span className="badge__hole" aria-hidden />
           <span className="badge__sheen" aria-hidden />
+          <span className="badge__foil" aria-hidden />
           <div className="badge__skills-inner">
             <div className="badge__brand">
               <span className="badge__mark" aria-hidden />
@@ -160,6 +214,11 @@ export function IdCard() {
           type="button"
           className={`badge__card badge__card--profile ${profileFront ? "is-front" : "is-back"}`}
           initial={false}
+          style={{
+            rotateX: profileFront ? tiltX : zero,
+            rotateY: profileFront ? tiltY : zero,
+            transformPerspective: 900,
+          }}
           animate={profileFront ? frontPose : rightBack}
           transition={reduce ? { duration: 0 } : swapTransition(profileFront)}
           onClick={swap}
@@ -168,21 +227,31 @@ export function IdCard() {
         >
           <span className="badge__hole" aria-hidden />
           <span className="badge__sheen" aria-hidden />
+          <span className="badge__foil" aria-hidden />
           <div className="badge__photo">
             <img src={site.photo} alt={site.fullName} />
             <span className="badge__photo-wash" aria-hidden />
             <span className="badge__wave" aria-hidden />
+            <span className="badge__pill">
+              <i aria-hidden />
+              Open to work
+            </span>
+            <span className="badge__seal" aria-hidden>
+              <i />
+            </span>
           </div>
           <div className="badge__info">
             <p className="badge__role">{site.title}</p>
-            <h2 className="badge__name">{site.fullName}</h2>
+            <h2 className="badge__name" aria-label={site.fullName}>
+              {firstName} <em>{restName.join(" ")}</em>
+            </h2>
             <div className="badge__meta">
               <span>{site.location}</span>
               <span>ID {site.idCode}</span>
             </div>
           </div>
         </motion.button>
-      </div>
+      </motion.div>
 
       <p className="badge__hint">
         <span>Tap to flip</span>

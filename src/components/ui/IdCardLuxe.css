@@ -1,0 +1,204 @@
+/* Dark Luxe upgrade for the ID card (loads after IdCard.css) */
+
+/* Soft accent glow behind the whole badge */
+.badge {
+  position: relative;
+}
+
+.badge::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 135%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  background: radial-gradient(closest-side, rgba(var(--accent-rgb), 0.2), transparent 72%);
+  filter: blur(8px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ---------- Lanyard: stitched strap with printed name ---------- */
+.badge__strap {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0%, transparent 35%, transparent 62%, rgba(0, 0, 0, 0.4) 100%),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, #ff8a5c 0%, #ff6a3d 42%, #d9531f 100%);
+}
+
+.badge__strap::before,
+.badge__strap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed rgba(255, 255, 255, 0.4);
+}
+
+.badge__strap::before {
+  left: 0.18rem;
+}
+
+.badge__strap::after {
+  right: 0.18rem;
+}
+
+.badge__strap-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(26, 11, 5, 0.6);
+}
+
+/* ---------- Cards ---------- */
+.badge__card.is-front {
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.6),
+    0 0 90px rgba(var(--accent-rgb), 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.badge__card.is-back {
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(var(--accent-rgb), 0.28);
+}
+
+/* Back card: lifted off the dark page so it reads clearly */
+.badge__card--skills {
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgba(var(--accent-rgb), 0.2), transparent 60%),
+    linear-gradient(165deg, #1a1a23 0%, #0c0c11 100%);
+}
+
+/* Holographic foil that follows the cursor */
+.badge__foil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  background:
+    radial-gradient(circle at var(--fx, 50%) var(--fy, 30%), rgba(255, 255, 255, 0.5), transparent 40%),
+    linear-gradient(
+      115deg,
+      transparent 18%,
+      rgba(255, 106, 61, 0.2) 33%,
+      rgba(255, 214, 102, 0.22) 44%,
+      rgba(125, 211, 252, 0.2) 55%,
+      rgba(196, 160, 255, 0.18) 66%,
+      transparent 82%
+    );
+  background-size:
+    100% 100%,
+    220% 220%;
+  background-position:
+    0 0,
+    var(--fx, 50%) var(--fy, 50%);
+  mix-blend-mode: overlay;
+}
+
+.badge__stack:hover .badge__card.is-front .badge__foil {
+  opacity: 1;
+}
+
+/* Status pill + holographic seal on the photo */
+.badge__pill {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.8rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.28rem 0.65rem 0.28rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f4f3f1;
+  background: rgba(13, 13, 18, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.badge__pill i {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.badge__seal {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.8rem;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: conic-gradient(
+    from var(--fa, 0deg),
+    #ff8a5c,
+    #ffd166,
+    #7dd3fc,
+    #c4b5fd,
+    #ff8a5c
+  );
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.badge__seal::before {
+  content: "";
+  position: absolute;
+  inset: 0.3rem;
+  border-radius: 50%;
+  background: rgba(13, 13, 18, 0.88);
+}
+
+.badge__seal i {
+  position: relative;
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--gradient-accent);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+/* Name: bold first name + serif italic surname (matches the hero) */
+.badge__name em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.12em;
+  letter-spacing: -0.03em;
+  background: linear-gradient(120deg, #ff6a3d, #e8890f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (hover: none) {
+  .badge__foil {
+    display: none;
+  }
+}
